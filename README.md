@@ -7,7 +7,7 @@
 
 <!-- TOP LANGUAGES -->
 <a href="https://github.com/MoonFoxy">
-  <img align="center" src="https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra&hide_title=true&langs_count=8&layout=compact&theme=dracula&title_color=f9826c" />
+  <img align="center" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MoonFoxy&hide_title=true&langs_count=8&layout=compact&theme=dracula&title_color=f9826c" />
 </a>
 
 <!-- IMAGE BEGINS HERE -->
