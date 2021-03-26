@@ -1,6 +1,6 @@
 <!-- **MoonFoxy/MoonFoxy** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on my GitHub profile. -->
 
-<div align="center">
+<div>
   <!-- TOP LANGUAGES -->
   <a href="https://github.com/MoonFoxy">
     <img align="center" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MoonFoxy&card_width=320&langs_count=10&layout=compact&theme=shades-of-purple" />
