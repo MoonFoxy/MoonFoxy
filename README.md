@@ -2,13 +2,19 @@
 
 <!-- GITHUB STATS -->
 <a href="https://github.com/MoonFoxy">
-  <img align="center" src="https://github-readme-stats.vercel.app/api?username=MoonFoxy&hide_title=true&show_icons=true&include_all_commits=true&count_private=true&line_height=24&theme=shades-of-purple" />
+  <img align="center" src="https://github-readme-stats.vercel.app/api?username=MoonFoxy&hide_title=true&show_icons=true&include_all_commits=true&count_private=true&line_height=37&theme=shades-of-purple" />
 </a>
 
-<!-- TOP LANGUAGES -->
+[//]: # (<!-- TOP LANGUAGES -->
 <a href="https://github.com/MoonFoxy">
   <img align="center" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MoonFoxy&hide_title=true&langs_count=8&layout=compact&theme=shades-of-purple" />
+</a>)
+
+<!-- WAKATIME -->
+<a href="https://github.com/MoonFoxy">
+  <img align="center" src="https://github-readme-stats.vercel.app/api/wakatime?username=MoonFoxy&hide_title=true&layout=compact&theme=shades-of-purple" />
 </a>
+
 
 <!-- IMAGE BEGINS HERE -->
 ``` diff
