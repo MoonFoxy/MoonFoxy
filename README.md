@@ -7,7 +7,7 @@
 
 <!-- TOP LANGUAGES -->
 <a href="https://github.com/MoonFoxy">
-  <img align="center" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MoonFoxy&card_width=445&langs_count=10&layout=compact&theme=shades-of-purple" />
+  <img align="center" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MoonFoxy&card_width=350&langs_count=10&layout=compact&theme=shades-of-purple" />
 </a>
 
 <!-- WAKATIME -->
