@@ -8,7 +8,7 @@
 
   <!-- WAKATIME -->
   <a href="https://github.com/MoonFoxy">
-    <img align="center" src="https://github-readme-stats.vercel.app/api/wakatime?username=MoonFoxy&hide_title=true&line_height=10&layout=compact&theme=shades-of-purple" />
+    <img align="center" src="https://github-readme-stats.vercel.app/api/wakatime?username=MoonFoxy&hide_title=true&langs_count=10&layout=compact&theme=shades-of-purple" />
   </a>
 </div>
 
