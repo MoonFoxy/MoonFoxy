@@ -1,17 +1,55 @@
 <!-- **MoonFoxy/MoonFoxy** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on my GitHub profile. -->
 
-<div>
+<h1 align="center">Welcome to <a href="https://github.com/MoonFoxy">MY</a> profile!</h1>
+
+<h3 align="center">🔥 Current streak 🔥</h3>
+<p align="center">
+  <!-- CURRENT STREAK -->
+  <a href="https://github.com/DenverCoder1/github-readme-streak-stats">
+    <img title="🔥 Current streak 🔥"
+         alt="MoonFoxy's streak"
+         src="https://github-readme-streak-stats.herokuapp.com/?user=MoonFoxy&theme=monokai-metallian&hide_border=true"
+         />
+  </a>
+</p>
+
+<details> 
+  <summary align="center">
+    <b>💻 GitHub Profile Stats 💻</b>
+  </summary>
+  
+  </br>
+  <!-- GITHUB STATS -->
+  <a href="https://github.com/anuraghazra/github-readme-stats">
+    <img title="Github Stats"
+         alt="MoonFoxy's Github Stats"
+         src="https://denvercoder1-github-readme-stats.vercel.app/api/?username=MoonFoxy&show_icons=true&count_private=true&theme=react&hide_border=true&bg_color=1F222E&title_color=F85D7F&icon_color=F8D866"
+         height="192px"
+         />
+  </a>
   <!-- TOP LANGUAGES -->
-  <a href="https://github.com/MoonFoxy">
-    <img align="center" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MoonFoxy&card_width=300&langs_count=10&layout=compact&theme=shades-of-purple" />
+  <a href="https://github.com/anuraghazra/github-readme-stats">
+    <img title="Top Languages"
+         alt="MoonFoxy's Top Languages"
+         src="https://github-readme-stats.vercel.app/api/top-langs/?username=MoonFoxy&langs_count=8&layout=compact&theme=react&hide_border=true&bg_color=1F222E&title_color=F85D7F&icon_color=F8D866&hide=Jupyter%20Notebook"
+         height="192px"
+         /> 
   </a>
-
   <!-- WAKATIME -->
-  <a href="https://github.com/MoonFoxy">
-    <img align="center" src="https://github-readme-stats.vercel.app/api/wakatime?username=MoonFoxy&hide_title=true&langs_count=10&layout=compact&theme=shades-of-purple" />
+  <a href="https://github.com/anuraghazra/github-readme-stats">
+    <img title="Top Languages"
+         alt="MoonFoxy's Top Languages"
+         src="https://github-readme-stats.vercel.app/api/wakatime?username=MoonFoxy&langs_count=10&layout=compact&theme=shades-of-purple"
+         height="192px"
+         />
   </a>
-</div>
+  <br/>
+  <p align="center">
+    <b>Note:</b> Top languages is only a metric of the languages my public code consists of and doesn't reflect experience or skill level.
+  </p>
+</details>
 
+<h3 align="center"></h3>
 
 <!-- IMAGE BEGINS HERE -->
 ``` diff
@@ -118,9 +156,13 @@
 ```
 <!-- IMAGE ENDS HERE -->
 
-
-<!-- HIDDEN AWAY -->
-[//]: # (<!-- GITHUB STATS -->
-<a href="https://github.com/MoonFoxy">
-  <img align="center" src="https://github-readme-stats.vercel.app/api?username=MoonFoxy&hide_title=true&show_icons=true&include_all_commits=true&count_private=true&line_height=24&theme=shades-of-purple" />
-</a>)
+<h3 align="center">ACTIVITY GRAPH</h3>
+<p align="center">
+  <!-- ACTIVITY GRAPH -->
+  <a href="https://github.com/ashutosh00710/github-readme-activity-graph">
+    <img title="Activity Graph"
+         alt="MoonFoxy's Activity Graph"
+         src="https://activity-graph.herokuapp.com/graph?username=MoonFoxy&bg_color=1F222E&color=F8D866&line=F85D7F&point=FFFFFF&hide_border=true"
+         />
+  </a>
+</p>
