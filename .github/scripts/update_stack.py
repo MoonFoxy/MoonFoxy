@@ -18,6 +18,7 @@ README_PATHS = [ROOT / "README.md", ROOT / "README-ru.md"]
 API_ROOT = "https://api.github.com"
 BADGE_BACKGROUND = "0B0E14"
 TOOLS_ACCENT = "95E6CB"
+STATIC_BADGE_TARGET = "#profile-badges"
 
 LANGUAGE_META = {
     "Kotlin": ("D2A6FF", "kotlin"),
@@ -112,7 +113,9 @@ def render_languages(totals: dict[str, int], minimum_percent: float, max_badges:
     for name, size in visible:
         percent = f"{size / total * 100:.1f}%"
         accent, logo = LANGUAGE_META.get(name, ("B3B1AD", None))
-        badges.append(f'  <img src="{badge_url(name, percent, accent, logo)}" alt="{name} {percent}">')
+        badges.append(
+            f'  <a href="{STATIC_BADGE_TARGET}"><img src="{badge_url(name, percent, accent, logo)}" alt="{name} {percent}"></a>'
+        )
 
     if russian:
         note = f"Обновляется раз в неделю. Языки ниже {minimum_percent:g}% скрываются."
@@ -131,7 +134,7 @@ def render_tools(tools: list[dict]) -> str:
     for tool in tools:
         name = str(tool["name"])
         badges.append(
-            f'  <img src="{badge_url(name, None, str(tool.get("accent", TOOLS_ACCENT)), tool.get("logo"))}" alt="{name}">'
+            f'  <a href="{STATIC_BADGE_TARGET}"><img src="{badge_url(name, None, str(tool.get("accent", TOOLS_ACCENT)), tool.get("logo"))}" alt="{name}"></a>'
         )
     return "\n".join(["<p>", *badges, "</p>"])
 
