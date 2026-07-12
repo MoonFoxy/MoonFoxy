@@ -5,6 +5,11 @@ on:
   schedule:
     - cron: "37 0 * * 1"
 
+concurrency:
+  group: profile-readme-updates
+  cancel-in-progress: false
+  queue: max
+
 permissions:
   contents: write
 
