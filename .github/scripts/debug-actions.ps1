@@ -64,11 +64,17 @@ if ($InstallPythonPackages) {
 
 Push-Location $Root
 try {
-    if ($Workflow -in @("neofetch", "all")) {
-        Require-Executable "ffmpeg"
-        if ([string]::IsNullOrWhiteSpace($env:GITHUB_TOKEN) -and -not [string]::IsNullOrWhiteSpace($env:PROFILE_README_TOKEN)) {
+    if (-not [string]::IsNullOrWhiteSpace($env:PROFILE_README_TOKEN)) {
+        if ([string]::IsNullOrWhiteSpace($env:GITHUB_TOKEN)) {
             $env:GITHUB_TOKEN = $env:PROFILE_README_TOKEN
         }
+        if ([string]::IsNullOrWhiteSpace($env:GH_PAT)) {
+            $env:GH_PAT = $env:PROFILE_README_TOKEN
+        }
+    }
+
+    if ($Workflow -in @("neofetch", "all")) {
+        Require-Executable "ffmpeg"
         Invoke-CheckedNative $Python @(".github\scripts\generate_terminal_gif.py", "--all")
         foreach ($name in @(
             "neofetch-en-dark.gif",

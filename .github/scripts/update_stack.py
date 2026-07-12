@@ -3,9 +3,12 @@
 
 from __future__ import annotations
 
+import base64
 import json
 import os
 import re
+import time
+from fnmatch import fnmatchcase
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
@@ -45,8 +48,18 @@ def request_json(url: str, token: str | None = None) -> object:
     if token:
         headers["Authorization"] = f"Bearer {token}"
     request = Request(url, headers=headers)
-    with urlopen(request, timeout=30) as response:
-        return json.loads(response.read().decode("utf-8"))
+    for attempt in range(3):
+        try:
+            with urlopen(request, timeout=30) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except HTTPError as error:
+            if error.code not in {429, 500, 502, 503, 504} or attempt == 2:
+                raise
+        except URLError:
+            if attempt == 2:
+                raise
+        time.sleep(2**attempt)
+    raise RuntimeError("GitHub API retry loop ended unexpectedly")
 
 
 def list_repositories(username: str, token: str | None, include_archived: bool, include_forks: bool) -> list[dict]:
@@ -86,6 +99,91 @@ def language_totals(repositories: list[dict], token: str | None, excluded: set[s
             if language.casefold() not in excluded:
                 totals[language] = totals.get(language, 0) + int(bytes_count)
     return totals
+
+
+def repository_evidence(repository: dict, token: str | None) -> tuple[set[str], str]:
+    full_name = repository.get("full_name")
+    default_branch = repository.get("default_branch")
+    if not full_name or not default_branch:
+        raise RuntimeError("Repository metadata is missing a name or default branch")
+
+    tree = request_json(
+        f"{API_ROOT}/repos/{full_name}/git/trees/{quote(str(default_branch), safe='')}?recursive=1",
+        token,
+    )
+    if not isinstance(tree, dict) or not isinstance(tree.get("tree"), list):
+        raise RuntimeError(f"GitHub returned an unexpected tree for {full_name}")
+    if tree.get("truncated"):
+        raise RuntimeError(f"GitHub truncated the repository tree for {full_name}")
+
+    paths: set[str] = set()
+    build_files: list[dict] = []
+    for item in tree["tree"]:
+        path = str(item.get("path", ""))
+        if not path:
+            continue
+        paths.add(path)
+        if item.get("type") != "blob" or int(item.get("size") or 0) > 262_144:
+            continue
+        name = path.rsplit("/", 1)[-1]
+        is_gradle_file = name in {
+            "build.gradle",
+            "build.gradle.kts",
+            "settings.gradle",
+            "settings.gradle.kts",
+            "libs.versions.toml",
+            "gradle.properties",
+        }
+        is_convention_plugin = (
+            path.startswith(("buildSrc/", "build-logic/"))
+            and path.endswith((".kt", ".kts", ".gradle"))
+        )
+        if is_gradle_file or is_convention_plugin:
+            build_files.append(item)
+
+    contents: list[str] = []
+    for item in build_files:
+        blob_url = item.get("url")
+        if not blob_url:
+            continue
+        blob = request_json(str(blob_url), token)
+        if not isinstance(blob, dict) or blob.get("encoding") != "base64":
+            raise RuntimeError(f"GitHub returned an unexpected blob for {full_name}/{item.get('path', '')}")
+        encoded = str(blob.get("content", ""))
+        contents.append(base64.b64decode(encoded).decode("utf-8", errors="ignore").casefold())
+    return paths, "\n".join(contents)
+
+
+def detect_tools(
+    repositories: list[dict],
+    token: str | None,
+    tools: list[dict],
+    minimum_repositories: int,
+    max_badges: int,
+) -> list[dict]:
+    hits = {str(tool["name"]): 0 for tool in tools}
+    for repository in repositories:
+        paths, contents = repository_evidence(repository, token)
+        for tool in tools:
+            detection = tool.get("detect", {})
+            path_patterns = [str(pattern) for pattern in detection.get("paths", [])]
+            content_patterns = [str(pattern).casefold() for pattern in detection.get("content", [])]
+            path_match = any(
+                fnmatchcase(path, pattern)
+                for path in paths
+                for pattern in path_patterns
+            )
+            content_match = any(pattern in contents for pattern in content_patterns)
+            if path_match or content_match:
+                hits[str(tool["name"])] += 1
+
+    visible = [
+        tool
+        for tool in tools
+        if bool(tool.get("always", False))
+        or hits[str(tool["name"])] >= int(tool.get("minimum_repositories", minimum_repositories))
+    ]
+    return visible[:max_badges]
 
 
 def badge_url(name: str, message: str | None, accent: str, logo: str | None = None) -> str:
@@ -172,11 +270,20 @@ def main() -> None:
 
     minimum_percent = float(config.get("minimum_language_percent", 2.0))
     max_badges = int(config.get("max_language_badges", 8))
+    detected_tools = detect_tools(
+        repositories,
+        token,
+        config["tools"],
+        int(config.get("minimum_tool_repositories", 1)),
+        int(config.get("max_tool_badges", 16)),
+    )
+    if not detected_tools:
+        raise RuntimeError("No tools were detected in the selected repositories")
     for readme_path in README_PATHS:
         is_russian = readme_path.name == "README-ru.md"
         text = readme_path.read_text(encoding="utf-8")
         text = replace_block(text, "STACK:LANGUAGES", render_languages(totals, minimum_percent, max_badges, is_russian))
-        text = replace_block(text, "STACK:TOOLS", render_tools(config["tools"]))
+        text = replace_block(text, "STACK:TOOLS", render_tools(detected_tools))
         readme_path.write_text(text, encoding="utf-8")
 
 

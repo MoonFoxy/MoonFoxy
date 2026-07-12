@@ -2,7 +2,9 @@
   "github_username": "MoonFoxy",
   "minimum_language_percent": 2.0,
   "max_language_badges": 8,
-  "include_archived": true,
+  "minimum_tool_repositories": 1,
+  "max_tool_badges": 16,
+  "include_archived": false,
   "include_forks": false,
   "excluded_repositories": [
     "MoonFoxy/MoonFoxy"
@@ -11,13 +13,101 @@
     "Jupyter Notebook"
   ],
   "tools": [
-    {"name": "Android", "logo": "android", "accent": "95E6CB"},
-    {"name": "Jetpack Compose", "logo": "jetpackcompose", "accent": "95E6CB"},
-    {"name": "Android Studio", "logo": "androidstudio", "accent": "95E6CB"},
-    {"name": "Room", "logo": "android", "accent": "95E6CB"},
-    {"name": "Hilt", "logo": "android", "accent": "95E6CB"},
-    {"name": "Retrofit", "logo": "square", "accent": "95E6CB"},
-    {"name": "Gradle", "logo": "gradle", "accent": "95E6CB"},
-    {"name": "GitHub Actions", "logo": "github-actions", "accent": "95E6CB"}
+    {
+      "name": "Android",
+      "logo": "android",
+      "accent": "95E6CB",
+      "detect": {"content": ["com.android.application", "com.android.library"]}
+    },
+    {
+      "name": "Jetpack Compose",
+      "logo": "jetpackcompose",
+      "accent": "95E6CB",
+      "detect": {"content": ["androidx.compose", "compose-bom", "org.jetbrains.kotlin.plugin.compose", "compose = true"]}
+    },
+    {
+      "name": "Android Studio",
+      "logo": "androidstudio",
+      "accent": "95E6CB",
+      "always": true
+    },
+    {
+      "name": "Room",
+      "logo": "android",
+      "accent": "95E6CB",
+      "detect": {"content": ["androidx.room", "room-runtime", "room-ktx"]}
+    },
+    {
+      "name": "Hilt",
+      "logo": "android",
+      "accent": "95E6CB",
+      "detect": {"content": ["com.google.dagger.hilt", "hilt-android", "androidx.hilt"]}
+    },
+    {
+      "name": "Retrofit",
+      "logo": "square",
+      "accent": "95E6CB",
+      "detect": {"content": ["com.squareup.retrofit2", "retrofit2:"]}
+    },
+    {
+      "name": "KSP",
+      "logo": "kotlin",
+      "accent": "95E6CB",
+      "detect": {"content": ["com.google.devtools.ksp"]}
+    },
+    {
+      "name": "Kotlin Coroutines",
+      "logo": "kotlin",
+      "accent": "95E6CB",
+      "detect": {"content": ["kotlinx-coroutines"]}
+    },
+    {
+      "name": "Ktor",
+      "logo": "ktor",
+      "accent": "95E6CB",
+      "detect": {"content": ["io.ktor"]}
+    },
+    {
+      "name": "Firebase",
+      "logo": "firebase",
+      "accent": "95E6CB",
+      "detect": {"content": ["com.google.firebase", "firebase-bom"]}
+    },
+    {
+      "name": "Coil",
+      "logo": "android",
+      "accent": "95E6CB",
+      "detect": {"content": ["io.coil-kt", "io.coil-kt.coil3"]}
+    },
+    {
+      "name": "DataStore",
+      "logo": "android",
+      "accent": "95E6CB",
+      "detect": {"content": ["androidx.datastore"]}
+    },
+    {
+      "name": "WorkManager",
+      "logo": "android",
+      "accent": "95E6CB",
+      "detect": {"content": ["androidx.work"]}
+    },
+    {
+      "name": "OkHttp",
+      "logo": "square",
+      "accent": "95E6CB",
+      "detect": {"content": ["com.squareup.okhttp3"]}
+    },
+    {
+      "name": "Gradle",
+      "logo": "gradle",
+      "accent": "95E6CB",
+      "detect": {"paths": ["gradlew", "gradlew.bat", "*gradle-wrapper.properties"]}
+    },
+    {
+      "name": "GitHub Actions",
+      "logo": "github-actions",
+      "accent": "95E6CB",
+      "detect": {"paths": [".github/workflows/*.yml", ".github/workflows/*.yaml"]}
+    }
   ]
 }
