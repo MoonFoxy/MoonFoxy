@@ -27,7 +27,8 @@ FRAMES_ROOT = ASSETS_PATH / "neofetch_frames"
 WIDTH = 720
 HEIGHT = 500
 FPS = 15
-FONT_SIZE = 13
+FONT_SIZE = 14
+FONT_WEIGHT = 450
 ART_FONT_SIZE = 8
 TYPING_FRAMES = 2
 LINE_REVEAL_FRAMES = 7
@@ -35,6 +36,24 @@ ART_PAUSE_FRAMES = 18
 CURSOR_PHASE_FRAMES = 5
 CURSOR_BLINK_CYCLES = 3
 FINAL_PAUSE_FRAMES = 45
+
+PROMPT_X = 10
+PROMPT_Y = 10
+ART_X = 16
+ART_Y = 66
+CONTENT_X = 260
+PROFILE_HEADER_Y = 50
+PROFILE_LINES_Y = 90
+CONTACT_HEADER_Y = 190
+CONTACT_LINES_Y = 232
+STATS_HEADER_Y = 310
+STATS_LINES_Y = 352
+FOOTER_Y = 470
+RULE_OFFSET_Y = 22
+LINE_HEIGHT = 20
+SECTION_RULE = "-" * 16
+RIGHT_MARGIN = 10
+SECTION_GAP = 12
 
 
 THEMES = {
@@ -137,14 +156,17 @@ class FrameWriter:
             image.save(self.path / f"frame_{self.index:04d}.png", "PNG")
 
 
-def load_font(size: int) -> ImageFont.FreeTypeFont:
+def load_font(size: int, weight: int | None = None) -> ImageFont.FreeTypeFont:
     if not FONT_PATH.exists():
         raise FileNotFoundError(f"JetBrains Mono is missing: {FONT_PATH}")
-    return ImageFont.truetype(
+    font = ImageFont.truetype(
         str(FONT_PATH),
         size,
         layout_engine=ImageFont.Layout.BASIC,
     )
+    if weight is not None:
+        font.set_variation_by_axes([weight])
+    return font
 
 
 def current_age(birth_year: int, birth_month: int) -> int:
@@ -279,15 +301,11 @@ def draw_label_value(
     label: str,
     value: str,
     value_color: str,
+    value_x: int,
 ) -> None:
-    label_text = f"{label}:"
-    draw_segments(
-        image,
-        font,
-        x,
-        y,
-        [(label_text, theme["cyan"]), ("  ", theme["foreground"]), (value, value_color)],
-    )
+    draw = ImageDraw.Draw(image)
+    draw.text((x, y), f"{label}:", fill=theme["cyan"], font=font)
+    draw.text((value_x, y), value, fill=value_color, font=font)
 
 
 def draw_highlight(
@@ -436,6 +454,64 @@ def stats_lines(language: str, stats: dict | None) -> list[tuple[str, str, str]]
     ]
 
 
+def section_right_edge(
+    font: ImageFont.FreeTypeFont,
+    lines: list[tuple[str, str, str]],
+    x: int,
+) -> float:
+    label_width = max((font.getlength(f"{label}:") for label, _, _ in lines if label), default=0)
+    value_x = x + round(label_width) + round(font.getlength("  "))
+    right_edges = []
+    for label, value, _ in lines:
+        if label:
+            right_edges.extend((x + font.getlength(f"{label}:"), value_x + font.getlength(value)))
+        else:
+            right_edges.append(x + font.getlength(value))
+    return max(right_edges, default=x)
+
+
+def validate_layout(
+    font: ImageFont.FreeTypeFont,
+    nickname: str,
+    footer: str,
+    profile_rows: list[tuple[str, str, str]],
+    contact_rows: list[tuple[str, str, str]],
+    stats_rows: list[tuple[str, str, str]],
+) -> None:
+    for section, rows in (
+        ("profile", profile_rows),
+        ("contact", contact_rows),
+        ("stats", stats_rows),
+    ):
+        right_edge = section_right_edge(font, rows, CONTENT_X)
+        if right_edge > WIDTH - RIGHT_MARGIN:
+            raise RuntimeError(f"{section} section exceeds the canvas by {right_edge - WIDTH + RIGHT_MARGIN:.1f}px")
+
+    prompt = f"{nickname}@github ~> "
+    footer_right = PROMPT_X + font.getlength(prompt + footer)
+    if footer_right > WIDTH - RIGHT_MARGIN:
+        raise RuntimeError(f"footer exceeds the canvas by {footer_right - WIDTH + RIGHT_MARGIN:.1f}px")
+
+    text_top = font.getbbox("Ag")[1]
+    text_bottom = font.getbbox("Ag")[3]
+    profile_bottom = PROFILE_LINES_Y + (len(profile_rows) - 1) * LINE_HEIGHT + text_bottom
+    contact_top = CONTACT_HEADER_Y + text_top
+    contact_bottom = CONTACT_LINES_Y + (len(contact_rows) - 1) * LINE_HEIGHT + text_bottom
+    stats_top = STATS_HEADER_Y + text_top
+    stats_bottom = STATS_LINES_Y + (len(stats_rows) - 1) * LINE_HEIGHT + text_bottom
+    footer_top = FOOTER_Y + text_top
+    gaps = {
+        "profile/contact": contact_top - profile_bottom,
+        "contact/stats": stats_top - contact_bottom,
+        "stats/footer": footer_top - stats_bottom,
+    }
+    for sections, gap in gaps.items():
+        if gap < SECTION_GAP:
+            raise RuntimeError(f"{sections} gap is only {gap}px")
+    if FOOTER_Y + text_bottom > HEIGHT:
+        raise RuntimeError("footer exceeds the canvas height")
+
+
 def draw_revealed_lines(
     image: Image.Image,
     writer: FrameWriter,
@@ -444,13 +520,19 @@ def draw_revealed_lines(
     lines: list[tuple[str, str, str]],
     x: int,
     y: int,
-    line_height: int = 19,
+    line_height: int = LINE_HEIGHT,
 ) -> int:
+    draw = ImageDraw.Draw(image)
+    label_width = max(
+        (round(draw.textlength(f"{label}:", font=font)) for label, _, _ in lines if label),
+        default=0,
+    )
+    value_x = x + label_width + round(draw.textlength("  ", font=font))
     for label, value, color_name in lines:
         if label:
-            draw_label_value(image, font, theme, x, y, label, value, theme[color_name])
+            draw_label_value(image, font, theme, x, y, label, value, theme[color_name], value_x)
         else:
-            ImageDraw.Draw(image).text((x, y), value, fill=theme[color_name], font=font)
+            draw.text((x, y), value, fill=theme[color_name], font=font)
         writer.append(image, LINE_REVEAL_FRAMES)
         y += line_height
     return y
@@ -470,7 +552,7 @@ def assemble_gif(frame_path: Path, output_path: Path) -> None:
         "-i",
         str(frame_path / "frame_%04d.png"),
         "-filter_complex",
-        "[0:v]split[a][b];[a]palettegen[p];[b][p]paletteuse=dither=sierra2_4a",
+        "[0:v]split[a][b];[a]palettegen=reserve_transparent=0[p];[b][p]paletteuse=dither=none",
         "-loop",
         "0",
         str(output_path),
@@ -481,7 +563,7 @@ def assemble_gif(frame_path: Path, output_path: Path) -> None:
 def render_variant(variant: Variant, profile: dict, stats: dict | None) -> int:
     theme = THEMES[variant.theme]
     labels = TEXT[variant.language]
-    font = load_font(FONT_SIZE)
+    font = load_font(FONT_SIZE, FONT_WEIGHT)
     art_font = load_font(ART_FONT_SIZE)
     art = parse_ascii_art()
     validate_art_characters(art)
@@ -489,12 +571,16 @@ def render_variant(variant: Variant, profile: dict, stats: dict | None) -> int:
     image = Image.new("RGB", (WIDTH, HEIGHT), theme["background"])
     writer = FrameWriter(variant.frame_path)
     age = current_age(int(profile["birth_year"]), int(profile["birth_month"]))
+    profile_rows = profile_lines(variant.language, profile, age)
+    contact_rows = contact_lines(variant.language, profile)
+    stats_rows = stats_lines(variant.language, stats)
+    validate_layout(font, str(profile["nickname"]), labels["footer"], profile_rows, contact_rows, stats_rows)
 
     prompt_end = draw_segments(
         image,
         font,
-        10,
-        10,
+        PROMPT_X,
+        PROMPT_Y,
         [
             (profile["nickname"], theme["red"]),
             ("@github", theme["yellow"]),
@@ -502,36 +588,73 @@ def render_variant(variant: Variant, profile: dict, stats: dict | None) -> int:
         ],
     )
     writer.append(image, 4)
-    type_text(image, writer, font, theme, prompt_end, 10, f"fetch.sh -u {profile['nickname']}", theme["cyan"])
+    type_text(
+        image,
+        writer,
+        font,
+        theme,
+        prompt_end,
+        PROMPT_Y,
+        f"fetch.sh -u {profile['nickname']}",
+        theme["cyan"],
+    )
 
-    draw_ascii_art(image, art_font, theme, art)
+    draw_ascii_art(image, art_font, theme, art, ART_X, ART_Y)
     writer.append(image, ART_PAUSE_FRAMES)
 
-    right_x = 260
-    draw_highlight(image, font, theme, right_x, 50, f"{profile['nickname']}@GitHub")
+    draw_highlight(image, font, theme, CONTENT_X, PROFILE_HEADER_Y, f"{profile['nickname']}@GitHub")
     writer.append(image, LINE_REVEAL_FRAMES)
-    ImageDraw.Draw(image).text((right_x, 69), "-" * 22, fill=theme["muted"], font=font)
+    ImageDraw.Draw(image).text(
+        (CONTENT_X, PROFILE_HEADER_Y + RULE_OFFSET_Y), SECTION_RULE, fill=theme["muted"], font=font
+    )
     writer.append(image, 3)
-    draw_revealed_lines(image, writer, font, theme, profile_lines(variant.language, profile, age), right_x, 86)
+    draw_revealed_lines(
+        image,
+        writer,
+        font,
+        theme,
+        profile_rows,
+        CONTENT_X,
+        PROFILE_LINES_Y,
+    )
 
-    draw_highlight(image, font, theme, right_x, 190, labels["contact"])
+    draw_highlight(image, font, theme, CONTENT_X, CONTACT_HEADER_Y, labels["contact"])
     writer.append(image, LINE_REVEAL_FRAMES)
-    ImageDraw.Draw(image).text((right_x, 209), "-" * 18, fill=theme["muted"], font=font)
+    ImageDraw.Draw(image).text(
+        (CONTENT_X, CONTACT_HEADER_Y + RULE_OFFSET_Y), SECTION_RULE, fill=theme["muted"], font=font
+    )
     writer.append(image, 3)
-    draw_revealed_lines(image, writer, font, theme, contact_lines(variant.language, profile), right_x, 226)
+    draw_revealed_lines(
+        image,
+        writer,
+        font,
+        theme,
+        contact_rows,
+        CONTENT_X,
+        CONTACT_LINES_Y,
+    )
 
-    draw_highlight(image, font, theme, right_x, 302, labels["stats"])
+    draw_highlight(image, font, theme, CONTENT_X, STATS_HEADER_Y, labels["stats"])
     writer.append(image, LINE_REVEAL_FRAMES)
-    ImageDraw.Draw(image).text((right_x, 321), "-" * 18, fill=theme["muted"], font=font)
+    ImageDraw.Draw(image).text(
+        (CONTENT_X, STATS_HEADER_Y + RULE_OFFSET_Y), SECTION_RULE, fill=theme["muted"], font=font
+    )
     writer.append(image, 3)
-    draw_revealed_lines(image, writer, font, theme, stats_lines(variant.language, stats), right_x, 338)
+    draw_revealed_lines(
+        image,
+        writer,
+        font,
+        theme,
+        stats_rows,
+        CONTENT_X,
+        STATS_LINES_Y,
+    )
 
-    footer_y = 468
     footer_prompt_end = draw_segments(
         image,
         font,
-        10,
-        footer_y,
+        PROMPT_X,
+        FOOTER_Y,
         [
             (profile["nickname"], theme["red"]),
             ("@github", theme["yellow"]),
@@ -545,14 +668,16 @@ def render_variant(variant: Variant, profile: dict, stats: dict | None) -> int:
         font,
         theme,
         footer_prompt_end,
-        footer_y,
+        FOOTER_Y,
         labels["footer"],
         theme["green"],
     )
 
     for _ in range(CURSOR_BLINK_CYCLES):
         cursor_frame = image.copy()
-        ImageDraw.Draw(cursor_frame).text((round(cursor_x), footer_y), "_", fill=theme["foreground"], font=font)
+        ImageDraw.Draw(cursor_frame).text(
+            (round(cursor_x), FOOTER_Y), "_", fill=theme["foreground"], font=font
+        )
         writer.append(cursor_frame, CURSOR_PHASE_FRAMES)
         writer.append(image, CURSOR_PHASE_FRAMES)
     writer.append(image, FINAL_PAUSE_FRAMES)
