@@ -1,21 +1,21 @@
 <p align="right">
-  <strong>🗺️ English</strong> · <a href="./README-ru.md">🇷🇺 Русский</a>
+  <a href="./README.md">🗺️ English</a> · <strong>🇷🇺 Русский</strong>
 </p>
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/neofetch-en-dark.gif">
-    <source media="(prefers-color-scheme: light)" srcset=".github/assets/neofetch-en-light.gif">
-    <img src=".github/assets/neofetch-en-dark.gif" alt="MoonFoxy — GitHub terminal profile" width="720">
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/neofetch-ru-dark.gif">
+    <source media="(prefers-color-scheme: light)" srcset=".github/assets/neofetch-ru-light.gif">
+    <img src=".github/assets/neofetch-ru-dark.gif" alt="MoonFoxy — терминальный профиль GitHub" width="720">
   </picture>
 </p>
 
 <p align="center">
-  Hi, I'm Ilya — aka <code>MoonFoxy</code>.
+  Привет, я Илья — <code>MoonFoxy</code>.
 </p>
 
 <p align="center">
-  Android Developer · Kotlin · Jetpack Compose
+  Android-разработчик · Kotlin · Jetpack Compose
 </p>
 
 ---
@@ -28,7 +28,7 @@
   <img src="https://img.shields.io/badge/Kotlin-6.2%25-0B0E14?style=flat-square&labelColor=0B0E14&logo=kotlin&logoColor=D2A6FF" alt="Kotlin 6.2%">
   <img src="https://img.shields.io/badge/JavaScript-3.3%25-0B0E14?style=flat-square&labelColor=0B0E14&logo=javascript&logoColor=E6B450" alt="JavaScript 3.3%">
 </p>
-<sub>Updated weekly. Languages below 2% are hidden.</sub>
+<sub>Обновляется раз в неделю. Языки ниже 2% скрываются.</sub>
 <!-- STACK:LANGUAGES:END -->
 
 ### `$ toolbox --native-android`
@@ -49,10 +49,10 @@
 ### `$ contact`
 
 <p>
-  <a href="https://t.me/MoonFoxy" title="Open Telegram: @MoonFoxy"><img src="https://img.shields.io/badge/Telegram-0B0E14?style=flat-square&labelColor=0B0E14&logo=telegram&logoColor=95E6CB" alt="Telegram"></a>
-  <a href="https://discord.com/users/289418396867624960" title="Open Discord profile: moonfoxy"><img src="https://img.shields.io/badge/Discord-moonfoxy-0B0E14?style=flat-square&labelColor=0B0E14&logo=discord&logoColor=95E6CB" alt="Discord: moonfoxy"></a>
-  <a href="https://github.com/MoonFoxy?tab=repositories" title="Website placeholder — repositories for now"><img src="https://img.shields.io/badge/Website-your--site.example-0B0E14?style=flat-square&labelColor=0B0E14&logo=googlechrome&logoColor=95E6CB" alt="Website placeholder"></a>
-  <a href="mailto:contact@your-site.example" title="Email contact@your-site.example"><img src="https://img.shields.io/badge/Email-contact@your--site.example-0B0E14?style=flat-square&labelColor=0B0E14&logo=gmail&logoColor=95E6CB" alt="Email placeholder"></a>
+  <a href="https://t.me/MoonFoxy" title="Открыть Telegram: @MoonFoxy"><img src="https://img.shields.io/badge/Telegram-0B0E14?style=flat-square&labelColor=0B0E14&logo=telegram&logoColor=95E6CB" alt="Telegram"></a>
+  <a href="https://discord.com/users/289418396867624960" title="Открыть профиль Discord: moonfoxy"><img src="https://img.shields.io/badge/Discord-moonfoxy-0B0E14?style=flat-square&labelColor=0B0E14&logo=discord&logoColor=95E6CB" alt="Discord: moonfoxy"></a>
+  <a href="https://github.com/MoonFoxy?tab=repositories" title="Плейсхолдер сайта — пока открыть репозитории"><img src="https://img.shields.io/badge/Website-your--site.example-0B0E14?style=flat-square&labelColor=0B0E14&logo=googlechrome&logoColor=95E6CB" alt="Website placeholder"></a>
+  <a href="mailto:contact@your-site.example" title="Написать на contact@your-site.example"><img src="https://img.shields.io/badge/Email-contact@your--site.example-0B0E14?style=flat-square&labelColor=0B0E14&logo=gmail&logoColor=95E6CB" alt="Email placeholder"></a>
 </p>
 
 <p align="right">

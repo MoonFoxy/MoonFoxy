@@ -1,0 +1,63 @@
+name: Update terminal neofetch
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 0 * * 1"
+
+permissions:
+  contents: write
+
+jobs:
+  generate-neofetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out profile repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install GIF dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install --upgrade pip
+          python -m pip install "Pillow>=11,<13"
+
+      - name: Generate localized terminal GIFs
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROFILE_README_TOKEN || github.token }}
+        run: python .github/scripts/generate_terminal_gif.py --all
+
+      - name: Verify generated GIFs
+        run: |
+          for file in \
+            .github/assets/neofetch-en-dark.gif \
+            .github/assets/neofetch-en-light.gif \
+            .github/assets/neofetch-ru-dark.gif \
+            .github/assets/neofetch-ru-light.gif; do
+            test -s "$file" || { echo "Missing or empty output: $file"; exit 1; }
+          done
+
+      - name: Commit generated GIFs
+        run: |
+          files=(
+            .github/assets/neofetch-en-dark.gif
+            .github/assets/neofetch-en-light.gif
+            .github/assets/neofetch-ru-dark.gif
+            .github/assets/neofetch-ru-light.gif
+          )
+
+          if [ -z "$(git status --porcelain -- "${files[@]}")" ]; then
+            echo "Terminal profiles are already current."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "${files[@]}"
+          git commit -m "chore: update terminal profiles"
+          git push

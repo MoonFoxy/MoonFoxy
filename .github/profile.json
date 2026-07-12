@@ -1,0 +1,14 @@
+{
+  "nickname": "MoonFoxy",
+  "birth_year": 2003,
+  "birth_month": 4,
+  "education": {
+    "en": "SPbETU \"LETI\" · BSc & MSc",
+    "ru": "СПбГЭТУ «ЛЭТИ» · бакалавр и магистр"
+  },
+  "contacts": {
+    "discord": "moonfoxy",
+    "telegram": "@MoonFoxy",
+    "email": "contact@your-site.example"
+  }
+}

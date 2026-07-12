@@ -1,0 +1,23 @@
+{
+  "github_username": "MoonFoxy",
+  "minimum_language_percent": 2.0,
+  "max_language_badges": 8,
+  "include_archived": true,
+  "include_forks": false,
+  "excluded_repositories": [
+    "MoonFoxy/MoonFoxy"
+  ],
+  "excluded_languages": [
+    "Jupyter Notebook"
+  ],
+  "tools": [
+    {"name": "Android", "logo": "android", "accent": "95E6CB"},
+    {"name": "Jetpack Compose", "logo": "jetpackcompose", "accent": "95E6CB"},
+    {"name": "Android Studio", "logo": "androidstudio", "accent": "95E6CB"},
+    {"name": "Room", "logo": "android", "accent": "95E6CB"},
+    {"name": "Hilt", "logo": "android", "accent": "95E6CB"},
+    {"name": "Retrofit", "logo": "square", "accent": "95E6CB"},
+    {"name": "Gradle", "logo": "gradle", "accent": "95E6CB"},
+    {"name": "GitHub Actions", "logo": "github-actions", "accent": "95E6CB"}
+  ]
+}

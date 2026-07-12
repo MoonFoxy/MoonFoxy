@@ -1,0 +1,39 @@
+name: Update profile stack
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "37 0 * * 1"
+
+permissions:
+  contents: write
+
+jobs:
+  update-stack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out profile repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Recalculate languages and tools
+        env:
+          GH_PAT: ${{ secrets.PROFILE_README_TOKEN }}
+        run: python .github/scripts/update_stack.py
+
+      - name: Commit changed stack
+        run: |
+          if git diff --quiet -- README.md README-ru.md; then
+            echo "Profile stack is already current."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md README-ru.md
+          git commit -m "chore: update profile stack"
+          git push

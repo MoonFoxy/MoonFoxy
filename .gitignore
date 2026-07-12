@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local environment and logs
+.env
+.env.*
+!.env.example
+*.log
+
+# Local GIF generation and visual QA
+/frames/
+/.github/assets/neofetch_frames/
+/.github/assets/qa/
+/.github/assets/debug_frames/
+/.github/assets/*-preview.png
+/.github/assets/avatar-source.png
+/.github/assets/content-source.png
+/.github/assets/content-avatar-last.png
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Final profile GIFs under .github/assets are intentionally tracked.
