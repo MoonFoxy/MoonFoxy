@@ -26,10 +26,10 @@
 
 <!-- STACK:LANGUAGES:START -->
 <p>
-  <a href="#profile-badges"><img src="https://img.shields.io/badge/JavaScript-51.5%25-0B0E14?style=flat-square&labelColor=0B0E14&logo=javascript&logoColor=E6B450" alt="JavaScript 51.5%"></a>
-  <a href="#profile-badges"><img src="https://img.shields.io/badge/Kotlin-40.3%25-0B0E14?style=flat-square&labelColor=0B0E14&logo=kotlin&logoColor=D2A6FF" alt="Kotlin 40.3%"></a>
-  <a href="#profile-badges"><img src="https://img.shields.io/badge/CSS-4.7%25-0B0E14?style=flat-square&labelColor=0B0E14&logo=css3&logoColor=59C2FF" alt="CSS 4.7%"></a>
-  <a href="#profile-badges"><img src="https://img.shields.io/badge/HTML-3.6%25-0B0E14?style=flat-square&labelColor=0B0E14&logo=html5&logoColor=FF8F40" alt="HTML 3.6%"></a>
+  <a href="#profile-badges"><img src="https://img.shields.io/badge/JavaScript-31.4%25-0B0E14?style=flat-square&labelColor=0B0E14&logo=javascript&logoColor=E6B450" alt="JavaScript 31.4%"></a>
+  <a href="#profile-badges"><img src="https://img.shields.io/badge/Astro-24.6%25-0B0E14?style=flat-square&labelColor=0B0E14" alt="Astro 24.6%"></a>
+  <a href="#profile-badges"><img src="https://img.shields.io/badge/Kotlin-22.7%25-0B0E14?style=flat-square&labelColor=0B0E14&logo=kotlin&logoColor=D2A6FF" alt="Kotlin 22.7%"></a>
+  <a href="#profile-badges"><img src="https://img.shields.io/badge/TypeScript-20.6%25-0B0E14?style=flat-square&labelColor=0B0E14&logo=typescript&logoColor=59C2FF" alt="TypeScript 20.6%"></a>
 </p>
 <sub>Updated weekly. Languages below 2% are hidden.</sub>
 <!-- STACK:LANGUAGES:END -->
